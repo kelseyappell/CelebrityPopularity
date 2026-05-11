@@ -1,0 +1,80 @@
+---
+title: "CelebrityPopularity"
+author: "Kelsey Appell"
+date: "2026-05-11"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Load Packages
+
+Load necessary packages here:
+
+```{r}
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+```
+
+## Load Data
+
+Load data here:
+
+```{r}
+celebs <- read.csv("popular_people.csv")
+```
+
+
+## Clean Data
+
+```{r}
+# Get rid of NA values
+celebs <- na.omit(celebs)
+
+# Transform Gender
+celebs$gender <- as.factor(celebs$gender)
+levels(celebs$gender) <- c("Not Specified","Female", "Male", "Non Bianary")
+
+# Transform department
+celebs <- celebs %>%
+  filter(known_for_department != "")
+```
+
+## Exploratory Questions
+```
+1. What department has the most celebrities?
+2. What department breeds the most popular celebrities?
+3. What department has more males/females?
+4. Does having a stage name cause more popularity?
+5. Do more males or females have stage names?
+```
+## Q1 Analysis
+
+What department has the most celebrities?
+
+```{r}
+# Visual of deps
+department_vis <- ggplot(celebs, aes(x = known_for_department, y = known_for_department, 
+                                     fill = known_for_department)) +
+  geom_col() +
+  labs(title = "Celebrities in Each Department",
+       x = "Department Name",
+       y = "Count", 
+       fill = "Departments") +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
+department_vis
+
+# Stats of deps
+department_num <- celebs %>%
+  count(known_for_department)
+department_num
+```
+
+```
+It is clear that the department with the largest number of celebrities is acting
+```
+
+## Q2 Analysis
